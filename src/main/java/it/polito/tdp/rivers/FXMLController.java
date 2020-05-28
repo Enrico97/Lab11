@@ -8,6 +8,8 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import it.polito.tdp.rivers.model.Model;
+import it.polito.tdp.rivers.model.River;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -25,7 +27,7 @@ public class FXMLController {
     private URL location;
 
     @FXML // fx:id="boxRiver"
-    private ComboBox<?> boxRiver; // Value injected by FXMLLoader
+    private ComboBox<River> boxRiver; // Value injected by FXMLLoader
 
     @FXML // fx:id="txtStartDate"
     private TextField txtStartDate; // Value injected by FXMLLoader
@@ -47,7 +49,34 @@ public class FXMLController {
 
     @FXML // fx:id="txtResult"
     private TextArea txtResult; // Value injected by FXMLLoader
-
+    
+    @FXML
+    void completa(ActionEvent event) {
+    	txtEndDate.setText(model.getCompletamento(boxRiver.getValue()).getMax().toString());
+    	txtStartDate.setText(model.getCompletamento(boxRiver.getValue()).getMin().toString());
+    	txtFMed.setText(model.getCompletamento(boxRiver.getValue()).getFlowAvg()+"");
+    	txtNumMeasurements.setText(model.getCompletamento(boxRiver.getValue()).getTot()+"");
+    }
+    
+    @FXML
+    void simula(ActionEvent event) {
+    	txtResult.clear();
+    	River river = boxRiver.getValue();
+		if (river==null) {
+			txtResult.appendText("selezionare un fiume");
+			return; }
+    	try {
+    		int k = Integer.parseInt(txtK.getText()); 
+    		model.simula(k, river);
+    		}
+    	catch (NumberFormatException e) {
+    		txtResult.appendText("inserire un numero intero");
+    		return;
+    	}
+    		
+    	txtResult.appendText("La capienza media è "+model.getMedia()+", \nmentre i giorni dove il servizio non è stato sufficiente sono "+model.getNo());
+    }
+    
     @FXML // This method is called by the FXMLLoader when initialization is complete
     void initialize() {
         assert boxRiver != null : "fx:id=\"boxRiver\" was not injected: check your FXML file 'Scene.fxml'.";
@@ -62,5 +91,6 @@ public class FXMLController {
     
     public void setModel(Model model) {
     	this.model = model;
+    	boxRiver.getItems().addAll(model.getAllRivers());
     }
 }

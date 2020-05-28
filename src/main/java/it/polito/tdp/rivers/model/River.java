@@ -1,5 +1,6 @@
 package it.polito.tdp.rivers.model;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,6 +9,9 @@ public class River {
 	private String name;
 	private double flowAvg;
 	private List<Flow> flows;
+	private LocalDate min;
+	private LocalDate max;
+	private int tot;
 	
 	public River(int id) {
 		this.id = id;
@@ -16,6 +20,34 @@ public class River {
 	public River(int id, String name) {
 		this.id = id;
 		this.name = name;
+	}
+
+	/**
+	 * @return the tot
+	 */
+	public int getTot() {
+		return tot;
+	}
+
+	/**
+	 * @param tot the tot to set
+	 */
+	public void setTot(int tot) {
+		this.tot = tot;
+	}
+
+	/**
+	 * @param flowAvg
+	 * @param min
+	 * @param max
+	 * @param tot
+	 */
+	public River(double flowAvg, LocalDate min, LocalDate max, int tot) {
+		super();
+		this.flowAvg = flowAvg;
+		this.min = min;
+		this.max = max;
+		this.tot = tot;
 	}
 
 	public String getName() {
@@ -51,10 +83,40 @@ public class River {
 			flows = new ArrayList<Flow>();
 		return flows;
 	}
+	
+	
+
+	/**
+	 * @return the min
+	 */
+	public LocalDate getMin() {
+		return min;
+	}
+
+	/**
+	 * @param min the min to set
+	 */
+	public void setMin(LocalDate min) {
+		this.min = min;
+	}
+
+	/**
+	 * @return the max
+	 */
+	public LocalDate getMax() {
+		return max;
+	}
+
+	/**
+	 * @param max the max to set
+	 */
+	public void setMax(LocalDate max) {
+		this.max = max;
+	}
 
 	@Override
 	public String toString() {
-		return name;
+		return name+" "+min+" "+max+" "+flowAvg;
 	}
 
 	@Override
